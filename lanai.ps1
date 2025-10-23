@@ -1,0 +1,48 @@
+$bat="$env:TEMP\lanai.bat"
+@'
+@ECHO OFF
+echo Lanai - Edge Policy Patcher by Fluidity Dev Team
+echo Version 1.0, Internal Beta 2
+echo ------------------------------------------------
+echo The lion doesn't concern himself with the opinions of tigers. 
+echo Lanai should not require administrator privileges or any on-disk modifications. 
+echo Checking if we're ready to proceed...
+
+echo This should be something involving reg query.  
+
+echo Right before trigger... (This is the real bug setup)
+echo [DEBUG] Ending msedge.exe
+taskkill /t /im msedge.exe
+
+echo Setting up the exploit... (This is the heap spray)
+echo Entering download mode...
+
+echo Initializing dark blockchain...
+echo [DEBUG] DELETING URLBlocklist value '1'
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v 1 /f
+timeout /t -1
+echo [DEBUG] Attempting Alternate Delete for URLBlocklist value '1'
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist\1"
+timeout /t -1
+echo [DEBUG] Setting URLBlocklist value
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v 1 /t REG_SZ /d "0" /f
+timeout /t -1
+echo [DEBUG] Enabling Developer Tools
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "DeveloperToolsAvailability" /t REG_DWORD /d 1 /f
+reg add "HKCU\SOFTWARE\Policies\Microsoft\Edge" /v "DeveloperToolsAvailability" /t REG_DWORD /d 1 /f
+timeout /t -1
+echo [DEBUG] And InPrivate Mode
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "InPrivateModeAvailability" /t REG_DWORD /d 0 /f
+timeout /t -1
+echo [DEBUG] And sign-in requirement
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "BrowserSignin" /t REG_DWORD /d 0 /f
+timeout /t -1
+echo [TODO] Patch screenshot tools, allowed/forced/disallowed extensions, tracking enforcement, multi-user, and ability to remove browsing history. 
+
+echo Preparing cryptography spoofing...
+echo All Done!
+exit
+'@ | Out-File -FilePath $bat -Encoding ASCII
+cmd /c $bat
+Remove-Item $bat -Force -ErrorAction SilentlyContinue
+exit 0
