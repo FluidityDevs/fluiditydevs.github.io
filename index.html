@@ -1,57 +1,54 @@
 $bat="$env:TEMP\lanai.bat"
 @'
 @ECHO OFF
-echo Lanai - Edge Policy Patcher by Fluidity Dev Team
-echo Version 1.0, Public Beta 2
-echo ------------------------------------------------
-echo The lion doesn't concern himself with the opinions of tigers. 
+echo Lanai - by Fluidity Dev Team
+echo Version 1.0, RC 1
+echo ----------------------------
 echo Checking if we're ready to proceed...
-
-echo This should be something involving reg query.  
-
+reg query "HKLM\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallForcelist" >nul 2>&1
+if %ERRORLEVEL%==0 (
+    echo We're all good!
+) else (
+    echo Are you sure you want to run Lanai?
+    echo If your machine hasn't had Group Policies set before for Microsoft Edge, please exit now to avoid populating your system with new ones.
+    timeout /t -1
+)
 echo Right before trigger... (This is the real bug setup)
-echo [DEBUG] Ending msedge.exe
 taskkill /t /im msedge.exe
 echo Setting up the exploit... (This is the heap spray)
-echo Entering download mode...
 echo Initializing dark blockchain...
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v 1 /t REG_SZ /d "0" /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallBlocklist" /v 1 /t REG_SZ /d "0" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v 1 /t REG_SZ /d "0" /f >nul 2>&1 || echo URLBlocklist failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallBlocklist" /v 1 /t REG_SZ /d "0" /f >nul 2>&1 || echo ExtensionInstallBlocklist failed
 echo Initializing light blockchain...
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLAllowlist" /v 1 /t REG_SZ /d "*" /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLAllowlist" /v 2 /t REG_SZ /d "*" /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLAllowlist" /v 3 /t REG_SZ /d "*" /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallAllowlist" /v 1 /t REG_SZ /d "*" /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallAllowlist" /v 2 /t REG_SZ /d "*" /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallAllowlist" /v 3 /t REG_SZ /d "*" /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\HttpAllowlist" /v 1 /t REG_SZ /d "*" /f >nul 2>&1 || echo HttpAllowlist failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLAllowlist" /v 1 /t REG_SZ /d "*" /f >nul 2>&1 || echo URLAllowlist [1] failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLAllowlist" /v 2 /t REG_SZ /d "*" /f >nul 2>&1 || echo URLAllowlist [2] failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLAllowlist" /v 3 /t REG_SZ /d "*" /f >nul 2>&1 || echo URLAllowlist [3] failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallAllowlist" /v 1 /t REG_SZ /d "*" /f >nul 2>&1 || echo ExtensionInstallAllowlist [1] failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallAllowlist" /v 2 /t REG_SZ /d "*" /f >nul 2>&1 || echo ExtensionInstallAllowlist [2] failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallAllowlist" /v 3 /t REG_SZ /d "*" /f >nul 2>&1 || echo ExtensionInstallAllowlist [3] failed
 echo Initializing force blockchain...
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallForcelist" /v 1 /t REG_SZ /d "0" /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallForcelist" /v 2 /t REG_SZ /d "0" /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallForcelist" /v 3 /t REG_SZ /d "0" /f
-echo [DEBUG] Enabling Developer Tools
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "DeveloperToolsAvailability" /t REG_DWORD /d 1 /f
-echo [DEBUG] Allowing InPrivate Mode
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "InPrivateModeAvailability" /t REG_DWORD /d 0 /f
-echo Bypassing BSi Check...
-echo BrowserSignin
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "BrowserSignin" /t REG_DWORD /d 0 /f
-echo BrowserGuestModeEnabled
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "BrowserGuestModeEnabled" /t REG_DWORD /d 1
-echo BrowserAddProfileEnabled
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "BrowserAddProfileEnabled" /t REG_DWORD /d 1
-echo ExtensionInstallForcelist
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "ExtensionInstallForcelist" /t REG_DWORD /d 0
-echo ForceSync
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "ForceSync" /t REG_DWORD /d 1
-echo VisualSearchEnabled
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "VisualSearchEnabled" /t REG_DWORD /d 1
-echo WebCaptureEnabled
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "WebCaptureEnabled" /t REG_DWORD /d 1
-echo [TODO] Patch screenshot tools, allowed/forced/disallowed extensions, tracking enforcement, multi-user, and ability to remove browsing history. 
-
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallForcelist" /v 1 /t REG_SZ /d "0" /f >nul 2>&1 || echo ExtensionInstallForcelist [1] failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallForcelist" /v 2 /t REG_SZ /d "0" /f >nul 2>&1 || echo ExtensionInstallForcelist [2] failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallForcelist" /v 3 /t REG_SZ /d "0" /f >nul 2>&1 || echo ExtensionInstallForcelist [3] failed
+echo Entering download mode...
+echo Patching Misc Features...
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "BrowserSignin" /t REG_DWORD /d 0 /f >nul 2>&1 || echo BrowserSignin failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "InPrivateModeAvailability" /t REG_DWORD /d 0 /f >nul 2>&1 || echo InPrivateModeAvailability failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "DeveloperToolsAvailability" /t REG_DWORD /d 1 /f >nul 2>&1 || echo DeveloperToolsAvailability failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "AllowDeletingBrowserHistory" /t REG_DWORD /d 1 /f >nul 2>&1 || echo AllowDeletingBrowserHistory failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "BrowserGuestModeEnabled" /t REG_DWORD /d 1 /f >nul 2>&1 || echo BrowserGuestModeEnabled failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "BrowserAddProfileEnabled" /t REG_DWORD /d 1 /f >nul 2>&1 || echo BrowserAddProfileEnabled failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "ExtensionInstallForcelist" /t REG_DWORD /d 0 /f >nul 2>&1 || echo ExtensionInstallForcelist failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "ForceSync" /t REG_DWORD /d 0 /f >nul 2>&1 || echo ForceSync failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "VisualSearchEnabled" /t REG_DWORD /d 1 /f >nul 2>&1 || echo VisualSearchEnabled failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "WebCaptureEnabled" /t REG_DWORD /d 1 /f >nul 2>&1 || echo WebCaptureEnabled failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "PrintingEnabled" /t REG_DWORD /d 1 /f >nul 2>&1 || echo PrintingEnabled failed
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "ConfigureDoNotTrack" /t REG_DWORD /d 1 /f >nul 2>&1 || echo ConfigureDoNotTrack failed
 echo Preparing cryptography spoofing...
+echo Future Optional Features (Ignore this and this is just a comment): SavingBrowserHistory, ClearBrowsingDataOnExit >nul 2>&1
 echo All Done!
-timeout /t 15 /nobreak
+timeout /t 3 /nobreak
 exit
 '@ | Out-File -FilePath $bat -Encoding ASCII
 cmd /c $bat
